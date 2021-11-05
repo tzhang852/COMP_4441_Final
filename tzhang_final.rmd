@@ -2,6 +2,59 @@
 title: "R Notebook"
 output: html_notebook
 ---
-```{r}
+Libraries
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(knitr)
+library(ggpubr)
+library(boot)
+library(lawstat)
+library(onewaytests)
+```
 
+
+First Load the data
+```{r}
+dat = read.csv("tzhang_data.csv")
+
+```
+Drop first 5 rows
+```{r}
+drop_dat = dat[-c(1, 2, 3, 4, 5),]
+```
+
+Rename headers
+```{r}
+names(drop_dat) = str_to_lower(names(drop_dat))
+names(drop_dat)[1] = 'occ'
+names(drop_dat)[2] = 'tot'
+names(drop_dat)[3] = 'mtot'
+names(drop_dat)[4] = 'men'
+names(drop_dat)[5] = 'mearn'
+names(drop_dat)[6] = 'women'
+names(drop_dat)[7] = 'wearn'
+```
+Replace '-' with blanks
+```{r}
+clean_dat = mutate_all(drop_dat,str_replace,"â€“","")
+clean_dat = clean_dat[!apply(clean_dat == '', 1, all),]
+clean_dat$'tot' = as.numeric(gsub(",", "", clean_dat$'tot'))
+clean_dat$'mtot' = gsub("\\$", "", clean_dat$'mtot')
+clean_dat$'mtot' = as.numeric(gsub(",", "", clean_dat$'mtot'))
+clean_dat$'men' = as.numeric(gsub(",", "", clean_dat$'men'))
+clean_dat$'mearn' = gsub("\\$", "", clean_dat$'mearn')
+clean_dat$'mearn' = as.numeric(gsub(",", "", clean_dat$'mearn'))
+clean_dat$'women' = as.numeric(gsub(",", "", clean_dat$'women'))
+clean_dat$'wearn' = gsub("\\$", "", clean_dat$'wearn')
+clean_dat$'wearn' = as.numeric(gsub(",", "", clean_dat$'wearn'))
+clean_dat[is.na(clean_dat)] = 0
+#clean_dat$'total number of workers' = as.integer(clean_dat$'total number of workers')
+#clean_dat$'total median weekly earnings' = as.integer(as.character(clean_dat$'total median weekly earnings'))
+
+```
+Create separate dataframes based on Occupation
+```{r}
+#mean of total
+mean(clean_dat$mtot)
 ```
