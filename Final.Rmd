@@ -1,0 +1,68 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+Libraries
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(knitr)
+library(ggpubr)
+library(boot)
+library(lawstat)
+library(onewaytests)
+```
+
+
+First Load the data
+```{r}
+dat = read.csv("tzhang_data.csv", header = TRUE)
+
+```
+```{r}
+dat = dat[-5,]
+```
+
+Rename headers
+```{r}
+names(dat) = str_to_lower(names(dat))
+names(dat)[1] = 'occupation'
+names(dat)[2] = 'total number of workers'
+names(dat)[3] = 'total median weekly earnings'
+names(dat)[4] = 'men number of workers'
+names(dat)[5] = 'men median weekly earnings'
+names(dat)[6] = 'women number of workers'
+names(dat)[7] = 'women median weekly earnings'
+names(dat)
+```
+Create separate dataframes based on Occupation
+```{r}
+#management (chief executives - managers, all other)
+#business (agents and business managers of artists, performers and athletes - other financial specialists)
+#computer
+#architecture
+#life sciences
+#social service
+#legal
+#education
+#arts
+#healthcare
+#healthcare support
+#protective support
+#food prep
+#grounds cleaning
+#personal care
+#sales
+#office admin
+#livestock
+#construction
+#installation
+#production
+#transportation
+```
+
+Mean
+```{r}
+show_dat = dat$'men median weekly earnings'
+show_dat
+```
